@@ -1,0 +1,150 @@
+# NES555 – Labs 1–3 Exam Cheat Sheet
+
+Use this sheet for quick **study** and **PDF/print**. Section titles are large; commands are short.
+
+---
+
+## Lab 1 – Packet Crafting & Network Analysis
+
+**Goal:** Understand packets, flags, and reading captures.
+
+**Basic network (Kali)**
+
+* `ip a` → list interfaces + IPs.
+* `ping -c 3 <IP>` → test target reachability.
+
+**Scapy basics**
+
+* Start: `scapy`
+* List layers: `ls()`
+* List commands: `lsc()`
+
+**Build packets**
+
+* IP header: `ip = IP(dst="IP")`
+* TCP header: `tcp = TCP(dport=80)`
+* Combine: `pkt = ip/tcp` → L3+L4 (OS fills MAC).
+* Full frame: `pkt2 = Ether()/IP()/TCP()` → control L2 MAC.
+* TTL auto: `del(ip.ttl)` → Scapy sets default TTL.
+
+**ICMP echo (ping)**
+
+* `sr1(IP(dst="IP")/ICMP()/"MSG")`
+  → ICMP Echo Reply if host is up, payload appears in data.
+
+**SYN probe (check port)**
+
+* `r = sr1(IP(dst="IP")/TCP(dport=80, flags="S"))`
+* `SA` (SYN+ACK) → **open**.
+* `R` (RST) → **closed**.
+* No response → often **filtered/firewalled**.
+
+**Unusual flags (FIN+PSH)**
+
+* `sr1(IP(dst="IP")/TCP(dport=80, flags="FP"), timeout=2)`
+  → usually **no response** (packet dropped as out‑of‑state).
+
+**Capture & analysis**
+
+* Capture: `sudo tcpdump -i eth0 -s0 -w lab1.pcap`
+* Wireshark filters: `icmp`, `tcp.port == 80`, `http`
+* Right‑click → **Follow → TCP Stream** for full convo.
+
+**Compare with nmap**
+
+* `nmap -sS -p80 IP` → expect `80/tcp open http` if Scapy SYN got `SA`.
+
+---
+
+## Lab 2 – Passive Recon & Footprinting
+
+**Goal:** Collect info **without active scanning**.
+
+**WHOIS (owner info)**
+
+* `whois domain` → registrar, creation/expiry, contacts.
+
+**DNS (technical records)**
+
+* `dig +noall +answer domain` → A records (IPs).
+* `dig +short NS domain` → name servers.
+* `dig +short MX domain` → mail servers.
+* `dig +short -x IP` → PTR (reverse DNS).
+
+**Certificate Transparency (crt.sh)**
+
+* Browser: `https://crt.sh/?q=%25domain`
+  → extra subdomains from TLS certs (e.g., `api`, `dev`, `staging`).
+
+**theHarvester (emails + hosts)**
+
+* `theHarvester -d domain -b bing -l 200 -f harvester_bing`
+  → emails (`user@domain`) + hostnames from search engines.
+
+**Subdomains (multiple tools)**
+
+* `sublist3r -d domain -o s.txt`
+* `amass enum -passive -d domain -o a.txt`
+  → combine with crt.sh + theHarvester for bigger list.
+
+**recon-ng (OSINT framework)**
+
+* `recon-ng` → `workspaces create/select`
+* Install module, e.g.: `marketplace install recon/domains-hosts/bing_domain_web`
+* `modules load recon/domains-hosts/bing_domain_web`
+* `options set SOURCE domain` → `run` → `show hosts`
+* Export: `export csv ~/nes555/lab2/hosts.csv hosts`.
+
+---
+
+## Lab 3 – Scanning & Enumeration
+
+**Goal:** Actively find live hosts, open ports, and services.
+
+**Capture scans**
+
+* `mkdir -p ~/nes555/lab3 && cd ~/nes555/lab3`
+* `sudo tcpdump -i eth0 -w lab3.pcap &`
+
+**Host discovery**
+
+* `sudo nmap -sn NET/24 -oN ping_sweep.txt` → ping/ARP sweep.
+* `sudo nmap -PR NET/24 -oN arp_sweep.txt` → ARP only (LAN, even if ICMP blocked).
+
+**TCP scans (Nmap)**
+
+* Quick common ports: `sudo nmap -Pn -sS -T4 -p1-1024 IP -oA quick`
+* Full TCP + scripts: `sudo nmap -sS -sV -sC -p- -T4 IP -oA full`
+
+  * `-sS` SYN scan, `-sV` version, `-sC` default NSE scripts, `-p-` all ports.
+
+**UDP (selected ports)**
+
+* `sudo nmap -sU -p53,67,69,123,161 IP -oN udp.txt`.
+
+**hping3 (custom probes)**
+
+* ICMP: `sudo hping3 -1 -c4 IP`
+* SYN: `sudo hping3 -S -p80 -c3 IP`
+* ACK/FIN: `sudo hping3 -A -p80 -c3 IP`, `sudo hping3 -F -p80 -c3 IP`
+  → Interpret like Nmap: `SA` = open, `R` = closed, no reply = filtered.
+
+**Service checks (netcat + enum4linux)**
+
+* HTTP banner: `echo -e "HEAD / HTTP/1.0
+
+" | nc IP 80`
+
+* SMB enum: `enum4linux -a IP > enum.txt` → users, shares, OS info.
+
+---
+
+## Quick Concepts to Memorize
+
+* **Passive recon (Lab 2):** no direct probing → WHOIS, DNS, CT logs, search engines, Shodan, recon-ng.
+* **Active recon (Lab 3):** direct packets to target → Nmap, Masscan, hping3, netcat, enum4linux.
+* **TCP flags:** S=SYN, A=ACK, F=FIN, P=PSH, R=RST.
+
+  * SYN → SYN+ACK (SA) = open; RST (R) = closed.
+  * No response → often filtered.
+* **Scapy vs Nmap:** Scapy = manual packet crafting; Nmap = automated scanning + logic.
