@@ -198,3 +198,18 @@ exploit
 sessions -i <id>
 sysinfo
 Notes: If manager login fails, document scanner output and skip to next exploit.
+
+
+ nmap / zenmap — host discovery, SYN/ACK, UDP, version detection, NSE scripts.
+• masscan — ultra-fast TCP SYN scanner (lab-limited).
+• hping3 — craft ICMP/TCP/UDP probes (TTL, flags, fragmentation, rate).
+• netcat (nc) — banner grabbing, simple service checks.
+• enum4linux — SMB/Windows enumeration (shares, users, OS info).
+• tcpdump / wireshark — capture/inspect probe traffic for validation.
+theHarvester aggregates search-engine results to find e-mail addresses, hostnames, and
+sometimes employee names.
+OpenVAS (Greenbone) Comprehensive vulnerability scanner
+Nikto Web server and CGI vulnerability scanner
+Burp Suite Community Web proxy/intercept and analysis suite
+Hydra Password/brute-force testing framework
+Firefox ESR Web browser for proxy and target access
