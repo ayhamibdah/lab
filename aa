@@ -118,6 +118,103 @@ find /var/www -name "*.php"
 kill -9 PID
 
 ```
+========================
+THEORETICAL OVERVIEW
+========================
+
+# General Concept
+These labs cover critical phases of ethical hacking, including client-side exploitation, system hacking, web-based attacks, and persistence techniques. The focus is on understanding how attackers gain initial access, escalate privileges, maintain long-term access, extract sensitive data, and hide their activity. Studying these techniques helps improve defensive detection, prevention, and incident response.
+
+--------------------------------
+Lab 6 – Client-Side Exploitation & Backdoors
+--------------------------------
+Client-side attacks target applications used directly by end users, such as browsers, executables, and documents, rather than servers. Attackers rely on social engineering to trick victims into executing malicious payloads that establish backdoors.
+
+Key Concepts:
+- Reverse Shell: The target initiates a connection back to the attacker, bypassing firewalls and NAT.
+- Persistence: Ensuring attacker access survives reboots or logouts.
+- Payload Delivery: Using malicious files or links to infect the victim.
+- GUI Backdoors: VNC-based access that provides full graphical control.
+
+Tools:
+- Metasploit: Exploitation framework and payload handler.
+- Netcat: Lightweight tool for creating shells and backdoors.
+- msfvenom: Generates malicious payloads.
+- Apache2: Hosts payloads for victim download.
+
+--------------------------------
+Lab 7 – Web-Based Hacking
+--------------------------------
+Web-based hacking focuses on exploiting vulnerabilities in web applications and web servers caused by insecure coding, weak authentication, poor session management, and misconfigurations. Since web applications are publicly accessible, they are a primary attack surface.
+
+Key Concepts:
+- OWASP Top 10: The most critical web application security risks.
+- Automated Scanning: Quickly identifying vulnerabilities using scanners.
+- Manual Exploitation: Verifying and exploiting vulnerabilities beyond scanner output.
+- Session Management Flaws: Insecure cookies that allow hijacking or impersonation.
+- Cookie Manipulation: Altering authentication cookies to bypass login mechanisms.
+
+Common Vulnerabilities:
+- Cross-Site Scripting (XSS)
+- SQL Injection (SQLi)
+- Authentication Bypass
+- Security Misconfiguration
+
+Tools:
+- OWASP ZAP: Automated vulnerability scanning and proxying.
+- Nikto: Web server vulnerability scanner.
+- Burp Suite: HTTP/HTTPS interception and manipulation.
+- Firefox Developer Tools: Cookie and session inspection.
+- WebGoat / DVWA: Intentionally vulnerable web applications.
+
+--------------------------------
+Lab 8 – System Hacking & Password Cracking
+--------------------------------
+System hacking involves exploiting vulnerable services, escalating privileges, extracting credential data, and cracking passwords offline to recover plaintext credentials.
+
+Key Concepts:
+- Enumeration → Exploitation → Privilege Escalation → Post-Exploitation
+- Password Hashes: Encrypted representations of passwords stored on the system.
+- Offline Cracking: Cracking hashes without interacting with the target.
+- Weak Passwords: Easily cracked due to short length or common patterns.
+
+Tools:
+- Nmap: Network discovery and service scanning.
+- Metasploit: Exploitation and session management.
+- John the Ripper: CPU-based password cracking.
+- Hashcat: High-speed GPU-based cracking.
+- hashid: Identifies password hash types.
+
+--------------------------------
+Lab 9 – Backdooring & Persistent Access
+--------------------------------
+This lab demonstrates how attackers maintain long-term access after a system is compromised, even if the original vulnerability is patched.
+
+Key Concepts:
+- Bind Shell: The target listens for incoming connections.
+- Reverse Shell: The target connects back to the attacker (preferred).
+- Persistence Mechanisms: Cron jobs and startup scripts.
+- Obfuscation: Hiding malicious binaries by renaming or disguising them.
+- Web Shells: PHP-based backdoors accessible via HTTP.
+- Anti-Forensics: Hiding timestamps and attacker traces.
+
+Tools:
+- Netcat: Bind and reverse shells.
+- Cron: Automatic execution after reboot.
+- VNC: Graphical remote access.
+- PHP: Web-based command execution.
+- Linux Admin Tools: ss, netstat, pstree, crontab, find.
+
+--------------------------------
+Defensive Perspective (Blue Team)
+--------------------------------
+From a defensive standpoint, these labs highlight the importance of:
+- Monitoring open ports and unexpected listeners.
+- Inspecting startup tasks and cron jobs.
+- Using file integrity monitoring (FIM).
+- Detecting abnormal processes and disguised binaries.
+- Securing web applications and enforcing strong passwords.
+- Disabling unused services and keeping systems updated.
 
 ---
 
