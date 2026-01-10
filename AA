@@ -199,7 +199,6 @@ sessions -i <id>
 sysinfo
 Notes: If manager login fails, document scanner output and skip to next exploit.
 
-
  nmap / zenmap — host discovery, SYN/ACK, UDP, version detection, NSE scripts.
 • masscan — ultra-fast TCP SYN scanner (lab-limited).
 • hping3 — craft ICMP/TCP/UDP probes (TTL, flags, fragmentation, rate).
