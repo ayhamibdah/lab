@@ -218,4 +218,11 @@ From a defensive standpoint, these labs highlight the importance of:
 
 ---
 
-✅ Commands only – Lab 9 quick reference
+Reverse Shell vs Bind Shell
+Reverse shells succeed because they use outbound connections, which are usually allowed through corporate firewalls, unlike inbound bind shells.
+Renamed Malicious Binary
+Defenders detect it through behavior, hashes, and network activity, not the filename.
+Weak VNC Password Risk
+Allows unauthorized remote access, often giving full control of the system.
+Danger of Persistence
+Persistence lets attackers maintain long-term access, even after reboots or partial cleanup
